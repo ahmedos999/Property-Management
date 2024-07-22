@@ -1,4 +1,4 @@
-import {User} from '../models/user'
+import {User} from '../models/userModel'
 const jwt = require('jsonwebtoken')
 
 const createToken = (_id:string)=>{

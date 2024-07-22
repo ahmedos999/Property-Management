@@ -23,4 +23,4 @@ const propertyCardSchema = new mongoose.Schema({
   
   propertyCardSchema.index({ community: 1, building: 1, unitNo: 1 }, { unique: true });
   
-  const PropertyCard = mongoose.model('PropertyCard', propertyCardSchema);
+  export const PropertyCard = mongoose.model('PropertyCard', propertyCardSchema);

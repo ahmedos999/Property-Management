@@ -3,6 +3,7 @@ require('dotenv').config()
 const mongoose = require('mongoose')
 const app = express()
 const userRoutes = require('./routes/userRoutes')
+const propertyRoutes = require('./routes/propertyCardRoutes')
 
 
 app.use(express.json())
@@ -15,6 +16,7 @@ app.use((req,res,next)=>{
 
 // route 
 app.use('/api/user',userRoutes)
+app.use('/api/property',propertyRoutes)
 
   mongoose.connect(process.env.MONG_URI).then(()=>{
     app.listen(process.env.PORT,()=>{

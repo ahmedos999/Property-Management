@@ -5,11 +5,6 @@ const leadSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    email: {
-        type: String,
-        unique: true,
-        required: true
-    },
     user: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
@@ -21,4 +16,4 @@ const leadSchema = new mongoose.Schema({
         required: true }
   });
   
-  const Lead = mongoose.model('Lead', leadSchema);
+  export const Lead = mongoose.model('Lead', leadSchema);
