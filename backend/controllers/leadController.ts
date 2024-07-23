@@ -16,6 +16,16 @@ export const createLead = async(req:any,res:any)=>{
  }
 }
 
+export const getleads = async(req:any,res:any)=>{
+  
+   try{
+      const lead = await Lead.find()
+      res.status(200).json(lead)
+   }catch(error:any){
+      return res.status(400).json({error:error.message})
+   }
+  }
+
 export const addLeadToProperty = async (req:any, res:any) => {
    const { leadId, propertyCardId } = req.body;
 

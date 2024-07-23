@@ -5,9 +5,19 @@ const app = express()
 const userRoutes = require('./routes/userRoutes')
 const propertyRoutes = require('./routes/propertyCardRoutes')
 const leadRoutes = require('./routes/leadRoutes')
+const cors = require('cors');
 
 
 app.use(express.json())
+
+// CORS options
+const corsOptions = {
+    origin: 'http://localhost:3000', // Allow only this origin
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    allowedHeaders: ['Content-Type', 'Authorization'],
+  };
+  
+  app.use(cors(corsOptions));
 
 // logging
 app.use((req,res,next)=>{
