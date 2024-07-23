@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken')
 
-const User = require('../models/userModel')
+import {User} from '../models/userModel'
 
 const requireAuth = async(req:any,res:any,next:any)=>{
     const {authorization} = req.headers
@@ -13,8 +13,8 @@ const requireAuth = async(req:any,res:any,next:any)=>{
 
     try{
         const { _id } = jwt.verify(token, process.env.SECRET)
-        // req.role = await User.findOne({_id}).select('role')
-        console.log(_id)
+        req.user = await User.findOne({_id}).select('role')
+        console.log(req.user.role)
         next()
     }catch(e){
         console.log(e)

@@ -4,7 +4,7 @@ const mongoose =  require('mongoose')
 
 export const getProperties = async(req:any,res:any)=>{
 
-   console.log(req.role)
+   if(req.user.role !== 'ADMIN') return res.status(400).json({error:'Requier admin access'})
 
     const property =  await PropertyCard.find().sort({createdAt:-1});
 
