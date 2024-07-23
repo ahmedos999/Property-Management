@@ -13,7 +13,7 @@ export const getProperties = async(req:any,res:any)=>{
 
 export const getPropertiesWithleads = async(req:any,res:any)=>{
 
-   console.log(req.role)
+   if(req.user.role !== 'ADMIN') return res.status(400).json({error:'Requier admin access'})
 
    const property =  await PropertyCard.find().sort({createdAt:-1}).populate('leads', 'name');;
 
@@ -21,6 +21,8 @@ export const getPropertiesWithleads = async(req:any,res:any)=>{
 }
 
 export const createProperty = async(req:any,res:any)=>{
+
+   if(req.user.role !== 'ADMIN') return res.status(400).json({error:'Requier admin access'})
     const { community, building, unitNo } = req.body;
 
  if( !community && !building && !unitNo){
@@ -37,6 +39,10 @@ export const createProperty = async(req:any,res:any)=>{
 }
 
 export const deleteProperty = async (req:any,res:any)=>{
+
+   if(req.user.role !== 'ADMIN') return res.status(400).json({error:'Requier admin access'})
+
+
    const {id} = req.params
    
    if(!mongoose.Types.ObjectId.isValid(id)){
@@ -54,6 +60,9 @@ export const deleteProperty = async (req:any,res:any)=>{
 }
 
 export const addLeadToProperty = async(req:any,res:any)=>{
+
+   if(req.user.role !== 'ADMIN') return res.status(400).json({error:'Requier admin access'})
+      
    const {id} = req.params
 
    if(!mongoose.Types.ObjectId.isValid(id)){
