@@ -59,6 +59,30 @@ export const deleteProperty = async (req:any,res:any)=>{
 
 }
 
+
+export const updateProperty = async (req:any,res:any)=>{
+
+   if(req.user.role !== 'ADMIN') return res.status(400).json({error:'Requier admin access'})
+
+
+   const {id} = req.params
+
+   const {community,building,unitNo} = req.body
+   
+   if(!mongoose.Types.ObjectId.isValid(id)){
+      return res.status(404).json({error:"No such property"})
+   }
+
+   const property = await PropertyCard.findByIdAndUpdate({_id:id},{$set:{unitNo,community,building}})
+
+   if(!property){
+      return res.status(400).json({error:'No such property'})
+   }
+
+   res.status(200).json(property)
+
+}
+
 export const addLeadToProperty = async(req:any,res:any)=>{
 
    if(req.user.role !== 'ADMIN') return res.status(400).json({error:'Requier admin access'})

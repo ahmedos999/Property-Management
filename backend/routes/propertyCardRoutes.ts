@@ -1,4 +1,4 @@
-import {getProperties,getPropertiesWithleads,createProperty,deleteProperty} from '../controllers/propertyCardController'
+import {getProperties,getPropertiesWithleads,createProperty,deleteProperty,updateProperty} from '../controllers/propertyCardController'
 const express  = require('express')
 const requireAuth = require('../middleware/requireAuth')
 
@@ -10,5 +10,6 @@ router.get('/',getProperties)
 router.get('/getPropertiesWithLeads',getPropertiesWithleads)
 router.post('/',createProperty)
 router.delete('/:id',deleteProperty)
+router.patch('/:id',updateProperty)
 
 module.exports = router

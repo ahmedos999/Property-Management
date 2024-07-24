@@ -5,12 +5,17 @@ import { Property } from '../types/property';
 
 interface ChildComponentProps {
   closeModal: () => void;
+    _id:string
+    UnitNo:string
+    community:string
+    Building:string
+    leads:any
 }
 
-const Modal: React.FC<ChildComponentProps> = ({ closeModal }) => {
-  const [unitNo, setunitNo] = useState<string>('');
-    const [selectedCommunity, setCommunity] = useState<string>('CommunityA');
-    const [selectedBuilding, setSelectedBuilding] = useState<string>('BuildingA');
+const UpdateModal: React.FC<ChildComponentProps> = ({ closeModal,_id,UnitNo,community,Building }) => {
+  const [unitNo, setunitNo] = useState<string>(UnitNo);
+    const [selectedCommunity, setCommunity] = useState<string>(community);
+    const [selectedBuilding, setSelectedBuilding] = useState<string>(Building);
 
     const handleCommunityChange = (event: ChangeEvent<HTMLInputElement>) => {
         setCommunity(event.target.value);
@@ -19,7 +24,7 @@ const Modal: React.FC<ChildComponentProps> = ({ closeModal }) => {
         setSelectedBuilding(event.target.value);
       };
 
-      const createProperty = async() =>{
+      const updateProperty = async() =>{
         const property = {unitNo,community:selectedCommunity,building:selectedBuilding}
 
         console.log(JSON.stringify(property))
@@ -86,7 +91,7 @@ const Modal: React.FC<ChildComponentProps> = ({ closeModal }) => {
         BuildingB
       </label>
     </div>
-        <button onClick={createProperty} className=" p-2 bg-blue-800 text-white rounded">
+        <button onClick={updateProperty} className=" p-2 bg-blue-800 text-white rounded">
           Add New Property
         </button>
       </div>
@@ -94,4 +99,4 @@ const Modal: React.FC<ChildComponentProps> = ({ closeModal }) => {
   );
 };
 
-export default Modal;
+export default UpdateModal;

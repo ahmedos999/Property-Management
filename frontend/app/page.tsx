@@ -61,7 +61,7 @@ export default function Home() {
         <div className="flex justify-between mb-4 mx-2"><h2>Create a new property</h2> <button onClick={()=>setShowModal(true)} className="px-2 py-1 border bg-blue-800 text-white rounded">New</button></div>
 
       <h2 className="text-black font-bold">List of Properites</h2>  
-      {properites && properites.map((prop)=>(<PropertyCard key={prop._id} unitNo={prop.unitNo} community={prop.community} Building={prop.building} leads={prop.leads}></PropertyCard>))}
+      {properites && properites.map((prop)=>(<PropertyCard key={prop._id} _id={prop._id} unitNo={prop.unitNo} community={prop.community} Building={prop.building} leads={prop.leads}></PropertyCard>))}
       
       </div>
       <div className="col-span-1 w-1 bg-slate-300 mx-auto">
