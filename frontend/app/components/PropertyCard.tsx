@@ -6,12 +6,12 @@ interface ChildComponentProps{
     community:string
     Building:string
     leads:any
+
 }
 
-export default function PropertyCard({ _id,unitNo, community, Building,leads }: ChildComponentProps) {
-    const deleteProperty = async()=>{
-        console.log(unitNo)
-        console.log(_id)
+export default function PropertyCard({ _id,unitNo, community, Building,leads,}: ChildComponentProps) {
+    const deleteProperty = async(event:any)=>{
+      event.stopPropagation()
         const response = await fetch(`http://localhost:4000/api/property/`+_id,{
             method:'DELETE',
             headers:{
@@ -28,7 +28,7 @@ export default function PropertyCard({ _id,unitNo, community, Building,leads }: 
         <div className="p-2 m-2 bg-white rounded">
             <div className="flex justify-between">
             <h2 className="text-black">Unit No: <span className="text-blue-800">{unitNo}</span></h2>
-            <button className="p-1 rounded bg-red-600 text-sm text-white" onClick={deleteProperty}>delete</button>
+            <button className="p-1 rounded bg-red-600 text-sm text-white" onClick={(e)=>deleteProperty(e)}>delete</button>
             </div>
             <h2 className="text-black">Comunity: <span>{community}</span></h2>
             <h2 className="text-black">Building: <span>{Building}</span></h2>

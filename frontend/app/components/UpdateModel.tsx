@@ -5,17 +5,15 @@ import { Property } from '../types/property';
 
 interface ChildComponentProps {
   closeModal: () => void;
-    _id:string
-    UnitNo:string
-    community:string
-    Building:string
-    leads:any
+  property:Property
 }
 
-const UpdateModal: React.FC<ChildComponentProps> = ({ closeModal,_id,UnitNo,community,Building }) => {
-  const [unitNo, setunitNo] = useState<string>(UnitNo);
-    const [selectedCommunity, setCommunity] = useState<string>(community);
-    const [selectedBuilding, setSelectedBuilding] = useState<string>(Building);
+const UpdateModal: React.FC<ChildComponentProps> = ({ closeModal,property }) => {
+  const [unitNo, setunitNo] = useState<string>(property.unitNo);
+    const [selectedCommunity, setCommunity] = useState<string>(property.community);
+    const [selectedBuilding, setSelectedBuilding] = useState<string>(property.building);
+    const id = property._id
+    
 
     const handleCommunityChange = (event: ChangeEvent<HTMLInputElement>) => {
         setCommunity(event.target.value);
@@ -29,8 +27,8 @@ const UpdateModal: React.FC<ChildComponentProps> = ({ closeModal,_id,UnitNo,comm
 
         console.log(JSON.stringify(property))
 
-        const response = await fetch('http://localhost:4000/api/property',{
-          method:'POST',
+        const response = await fetch(`http://localhost:4000/api/property/` + id,{
+          method:'PATCH',
           body:JSON.stringify(property),
           headers:{
               'Authorization':`Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjllY2MyMTBlMTRmYmYzODMwOTYzOTkiLCJpYXQiOjE3MjE3MzYzNDksImV4cCI6MTcyMTk5NTU0OX0.I4m_dWFn37vBAyQJ-CgAascf4_sRn23kiM_aMJlnFCI`,
@@ -91,8 +89,11 @@ const UpdateModal: React.FC<ChildComponentProps> = ({ closeModal,_id,UnitNo,comm
         BuildingB
       </label>
     </div>
+    <div className='flex gap-1 flex-wrap'>
+      {property.leads.map((lead)=>(<div className='p-1 rounded bg-slate-500 text-white'>{lead.name}</div>))}
+    </div>
         <button onClick={updateProperty} className=" p-2 bg-blue-800 text-white rounded">
-          Add New Property
+          Update Property information
         </button>
       </div>
     </div>
