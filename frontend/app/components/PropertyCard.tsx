@@ -1,3 +1,4 @@
+import { usePropertyContext } from "../hooks/usePropertyContext"
 import { Property } from "../types/property"
 
 interface ChildComponentProps{
@@ -10,6 +11,7 @@ interface ChildComponentProps{
 }
 
 export default function PropertyCard({ _id,unitNo, community, Building,leads,}: ChildComponentProps) {
+  const {state,dispatch} = usePropertyContext()
     const deleteProperty = async(event:any)=>{
       event.stopPropagation()
         const response = await fetch(`http://localhost:4000/api/property/`+_id,{
@@ -22,7 +24,7 @@ export default function PropertyCard({ _id,unitNo, community, Building,leads,}: 
             throw new Error('Somthing went wrong');
           }
         const json:Property = await response.json()
-        console.log(json)
+        dispatch({type:'DELETE_PROPERTY',payload:json})
     }
     return(
         <div className="p-2 m-2 bg-white rounded">

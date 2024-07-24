@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter, Rubik } from 'next/font/google'
 import "./globals.css";
 import Navbar from "./components/Navbar";
+import PropertyContextProvider from "./context/propertycontext";
 
 const rubik = Rubik({ subsets: ["latin"] });
 
@@ -17,8 +18,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <PropertyContextProvider>
       <body className={rubik.className}>
       <Navbar></Navbar>{children}</body>
+      </PropertyContextProvider>
     </html>
   );
 }

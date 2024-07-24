@@ -8,14 +8,16 @@ import { Property } from "./types/property";
 import { Lead } from "./types/lead";
 import UpdateModal from "./components/UpdateModel";
 import LeadModal from "./components/LeadModel";
+import { usePropertyContext } from "./hooks/usePropertyContext";
 
 
 export default function Home() {
   const [showModal,setShowModal] = useState<boolean>(false)
   const [showLeadModal,setShowLeadModal] = useState<boolean>(false)
-  const [properites,setProperites] = useState<Property[]>([])
   const [leads,setLeads] = useState<Lead[]>([])
   const [currentProperty,setCurrentProperty] = useState<Property | null>()
+
+  const {state,dispatch} = usePropertyContext()
 
   useEffect(()=>{
     const fetchProperty = async()=>{
@@ -31,7 +33,7 @@ export default function Home() {
       }
 
     const json:Property[] = await response.json()
-    setProperites(json)
+    dispatch({type:'SET_PROPERTY',payload:json})
     }
 
     const fetchLeads = async()=>{
@@ -65,7 +67,7 @@ export default function Home() {
         <div className="flex justify-between mb-4 mx-2"><h2>Create a new property</h2> <button onClick={()=>setShowModal(true)} className="px-2 py-1 border bg-blue-800 text-white rounded">New</button></div>
 
       <h2 className="text-black font-bold">List of Properites</h2>  
-      {properites && properites.map((prop)=>(<div key={prop._id} onClick={()=>setCurrentProperty({_id:prop._id,community:prop.community,building:prop.building,leads:prop.leads,unitNo:prop.unitNo})}><PropertyCard _id={prop._id} unitNo={prop.unitNo} community={prop.community} Building={prop.building} leads={prop.leads}></PropertyCard></div>))}
+      {state.properites && state.properites.map((prop)=>(<div key={prop._id} onClick={()=>setCurrentProperty({_id:prop._id,community:prop.community,building:prop.building,leads:prop.leads,unitNo:prop.unitNo})}><PropertyCard _id={prop._id} unitNo={prop.unitNo} community={prop.community} Building={prop.building} leads={prop.leads}></PropertyCard></div>))}
       
       </div>
       <div className="col-span-1 w-1 bg-slate-300 mx-auto">
