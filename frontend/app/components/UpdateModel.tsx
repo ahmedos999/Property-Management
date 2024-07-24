@@ -3,7 +3,7 @@
 import React, { ChangeEvent, useState } from 'react';
 import { Property } from '../types/property';
 import { Lead } from '../types/lead';
-import { json } from 'stream/consumers';
+import { usePropertyContext } from '../hooks/usePropertyContext';
 
 interface ChildComponentProps {
   closeModal: () => void;
@@ -16,7 +16,9 @@ const UpdateModal: React.FC<ChildComponentProps> = ({ closeModal,property,leads 
     const [selectedCommunity, setCommunity] = useState<string>(property.community);
     const [selectedBuilding, setSelectedBuilding] = useState<string>(property.building);
     const [selectedLead, setSelectedLead] = useState<Lead>();
+    const [addedLeads, setaddedLeads] = useState<Lead[]>([]);
     const id = property._id
+    const {state,dispatch} = usePropertyContext()
     
 
     const handleCommunityChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -27,7 +29,6 @@ const UpdateModal: React.FC<ChildComponentProps> = ({ closeModal,property,leads 
       };
       const handleSelectChange = (event: ChangeEvent<HTMLInputElement>)=>{
         if(event.target.value === '') return
-        console.log('ran')
         setSelectedLead(JSON.parse(event.target.value))
       }
 
@@ -48,10 +49,23 @@ const UpdateModal: React.FC<ChildComponentProps> = ({ closeModal,property,leads 
           throw new Error('Somthing went wrong');
         }
       const json:Property = await response.json()
+      json.unitNo = property.unitNo
+      json.building = property.building
+      json.community = property.community
+      console.log(json)
+      dispatch({type:'UPDATE_PROPERTY',payload:json})
+      closeModal()
       }
 
       const linkPropertytoLead = async() =>{
         if(!selectedLead || !property) return
+        let found = false
+        property.leads.forEach((prop)=>{
+          if(prop._id === selectedLead._id){
+            found = true
+          }
+        })
+        if(addedLeads.includes(selectedLead)||found) return
 
         const ids = {leadId:selectedLead._id,propertyCardId:property._id}
 
@@ -68,8 +82,9 @@ const UpdateModal: React.FC<ChildComponentProps> = ({ closeModal,property,leads 
          if (!response.ok) {
           throw new Error('Somthing went wrong');
         }
-
-        
+        const leadtoProperty:Property = {unitNo:property.unitNo,community:property.community,building:property.building,_id:property._id ,leads:[...property.leads,selectedLead]}
+        dispatch({type:'UPDATE_PROPERTY',payload:leadtoProperty})
+        setaddedLeads([...addedLeads,selectedLead])
       }
   return (
     <div className="flex justify-center items-center fixed z-50 inset-0 overflow-y-auto bg-black bg-opacity-50 backdrop-filter backdrop-blur-sm">
@@ -122,6 +137,7 @@ const UpdateModal: React.FC<ChildComponentProps> = ({ closeModal,property,leads 
     <label htmlFor="" className='font-bold text-black'>Leads</label>
     {property.leads.length == 0?<div>There is no Customers linked to this property </div>:<div className='flex gap-1 flex-wrap'>
       {property.leads.map((lead)=>(<div className='p-1 rounded bg-slate-500 text-white'>{lead.name}</div>))}
+      {addedLeads && addedLeads.map((lead)=>(<div className='p-1 rounded bg-green-500 text-white'>{lead.name}</div>))}
     </div>}
     <div className='my-2'>
     <label className="text-sm block">Link Customers to property</label>

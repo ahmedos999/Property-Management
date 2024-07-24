@@ -2,6 +2,7 @@
 
 import React, { ChangeEvent, useState } from 'react';
 import { Property } from '../types/property';
+import { usePropertyContext } from '../hooks/usePropertyContext';
 
 interface ChildComponentProps {
   closeModal: () => void;
@@ -11,6 +12,7 @@ const Modal: React.FC<ChildComponentProps> = ({ closeModal }) => {
   const [unitNo, setunitNo] = useState<string>('');
     const [selectedCommunity, setCommunity] = useState<string>('CommunityA');
     const [selectedBuilding, setSelectedBuilding] = useState<string>('BuildingA');
+    const {state,dispatch} = usePropertyContext()
 
     const handleCommunityChange = (event: ChangeEvent<HTMLInputElement>) => {
         setCommunity(event.target.value);
@@ -36,7 +38,8 @@ const Modal: React.FC<ChildComponentProps> = ({ closeModal }) => {
           throw new Error('Somthing went wrong');
         }
       const json:Property = await response.json()
-      console.log(json)
+      dispatch({type:'CREATE_PROPERTY',payload:json})
+      closeModal()
       }
   return (
     <div className="flex justify-center items-center fixed z-50 inset-0 overflow-y-auto bg-black bg-opacity-50 backdrop-filter backdrop-blur-sm">

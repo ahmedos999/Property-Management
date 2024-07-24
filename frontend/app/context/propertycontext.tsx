@@ -9,7 +9,7 @@ interface State {
 }
 
 interface Action {
-  type: "SET_PROPERTY" | "CREATE_PROPERTY" | "DELETE_PROPERTY" | "EMPTY_PROPERTY";
+  type: "SET_PROPERTY" | "CREATE_PROPERTY" | "DELETE_PROPERTY" | "EMPTY_PROPERTY" | "UPDATE_PROPERTY";
   payload?: Property | Property[];
 }
 
@@ -27,6 +27,13 @@ export const propertyReducer = (state: State, action: Action): State => {
       return { properites: state.properites?.filter((property: Property) => property._id !== (action.payload as Property)._id) || null };
     case "EMPTY_PROPERTY":
       return { properites: [] };
+      
+      case "UPDATE_PROPERTY":
+        return { 
+          properites: state.properites?.map((property: Property) => 
+            property._id === (action.payload as Property)._id ? (action.payload as Property) : property
+          ) || null 
+        };
     default:
       return state;
   }

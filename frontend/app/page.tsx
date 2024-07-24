@@ -9,15 +9,17 @@ import { Lead } from "./types/lead";
 import UpdateModal from "./components/UpdateModel";
 import LeadModal from "./components/LeadModel";
 import { usePropertyContext } from "./hooks/usePropertyContext";
+import { useLeadContext } from "./hooks/useLeadContext";
 
 
 export default function Home() {
   const [showModal,setShowModal] = useState<boolean>(false)
   const [showLeadModal,setShowLeadModal] = useState<boolean>(false)
-  const [leads,setLeads] = useState<Lead[]>([])
+
   const [currentProperty,setCurrentProperty] = useState<Property | null>()
 
   const {state,dispatch} = usePropertyContext()
+  const {state:leads,dispatch:dispatchLead} = useLeadContext()
 
   useEffect(()=>{
     const fetchProperty = async()=>{
@@ -46,7 +48,8 @@ export default function Home() {
         throw new Error('Somthing went wrong');
       }
     const json:Lead[] = await response.json()
-    setLeads(json)
+    dispatchLead({type:'SET_LEAD',payload:json})
+
     }
     
     fetchProperty()
@@ -76,10 +79,10 @@ export default function Home() {
       <div className=" col-span-2 ">
       <div className="flex justify-between mb-4 mx-2"><h2>Add new Customer</h2> <button onClick={()=>setShowLeadModal(true)} className="px-2 py-1 border bg-blue-800 text-white rounded">New</button></div>
       <h2 className="text-black font-bold">List of Customers</h2>   
-        {leads && leads.map((lead)=>(<LeadCard key={lead._id} name={lead.name} user={lead.user} propertyCard={lead.propertyCard}></LeadCard>))}
+        {leads.leads && leads.leads.map((lead)=>(<LeadCard key={lead._id} name={lead.name} user={lead.user} propertyCard={lead.propertyCard}></LeadCard>))}
       </div>
       {showModal && <Modal closeModal={closeModal}></Modal>}
-      {currentProperty && leads && <UpdateModal closeModal={closeModal} property={currentProperty} leads={leads} ></UpdateModal>}
+      {currentProperty && leads.leads && <UpdateModal closeModal={closeModal} property={currentProperty} leads={leads.leads} ></UpdateModal>}
       {showLeadModal && <LeadModal closeModal={closeModal}></LeadModal>}
     </main>
   );

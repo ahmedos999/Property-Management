@@ -2,6 +2,8 @@
 
 import React, { ChangeEvent, useState } from 'react';
 import { Lead } from '../types/lead';
+import { useLeadContext } from '../hooks/useLeadContext';
+
 
 interface ChildComponentProps {
     closeModal: () => void;
@@ -9,6 +11,8 @@ interface ChildComponentProps {
 
 const LeadModal: React.FC<ChildComponentProps> = ({ closeModal }) => {
   const [customerName, setcustomerName] = useState<string>('');
+  const {state,dispatch} = useLeadContext()
+  
 
 
       const createLead = async() =>{
@@ -28,7 +32,8 @@ const LeadModal: React.FC<ChildComponentProps> = ({ closeModal }) => {
           throw new Error('Somthing went wrong');
         }
       const json:Lead = await response.json()
-      console.log(json)
+      dispatch({type:'CREATE_LEAD',payload:json})
+      closeModal()
       }
   return (
     <div className="flex justify-center items-center fixed z-50 inset-0 overflow-y-auto bg-black bg-opacity-50 backdrop-filter backdrop-blur-sm">
