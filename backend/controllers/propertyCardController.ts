@@ -82,23 +82,3 @@ export const updateProperty = async (req:any,res:any)=>{
    res.status(200).json(property)
 
 }
-
-export const addLeadToProperty = async(req:any,res:any)=>{
-
-   if(req.user.role !== 'ADMIN') return res.status(400).json({error:'Requier admin access'})
-      
-   const {id} = req.params
-
-   if(!mongoose.Types.ObjectId.isValid(id)){
-      return res.status(404).json({error:"No such property"})
-   }
-
-    const property = await PropertyCard.updateOne({_id:id},{status:'done'})
-
-    if(!property){
-      return res.status(400).json({error:'No such property'})
-   }
-
-   res.status(200).json(property)
-
-}

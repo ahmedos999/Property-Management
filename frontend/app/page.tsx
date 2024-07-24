@@ -75,7 +75,7 @@ export default function Home() {
         {leads && leads.map((lead)=>(<LeadCard key={lead._id} name={lead.name} user={lead.user} propertyCard={lead.propertyCard}></LeadCard>))}
       </div>
       {showModal && <Modal closeModal={closeModal}></Modal>}
-      {currentProperty && <UpdateModal closeModal={closeModal} property={currentProperty} ></UpdateModal>}
+      {currentProperty && leads && <UpdateModal closeModal={closeModal} property={currentProperty} leads={leads} ></UpdateModal>}
     </main>
   );
 }
