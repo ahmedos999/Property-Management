@@ -29,7 +29,7 @@ export default function PropertyCard({ _id,unitNo, community, Building,leads,}: 
         dispatch({type:'DELETE_PROPERTY',payload:json})
     }
     return(
-        <div className="p-2 m-2 bg-white rounded">
+        <div className="p-2 m-2 bg-white rounded shadow">
             <div className="flex justify-between">
             <h2 className="text-black">Unit No: <span className="text-blue-800">{unitNo}</span></h2>
             <button className="p-1 rounded bg-red-600 text-sm text-white" onClick={(e)=>deleteProperty(e)}>delete</button>
