@@ -37,3 +37,5 @@ app.use('/api/lead',leadRoutes)
 }).catch((error:any)=>{
     console.log(error)
 })
+
+export default app;
