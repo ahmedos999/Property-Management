@@ -4,6 +4,7 @@ import "./globals.css";
 import Navbar from "./components/Navbar";
 import PropertyContextProvider from "./context/propertycontext";
 import LeadContextProvider from "./context/leadcontext";
+import AuthContextProvider from "./context/authcontext";
 
 const rubik = Rubik({ subsets: ["latin"] });
 
@@ -19,12 +20,14 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <LeadContextProvider>
-      <PropertyContextProvider>
-      <body className={rubik.className}>
-      <Navbar></Navbar>{children}</body>
-      </PropertyContextProvider>
-      </LeadContextProvider>
+      <AuthContextProvider>
+        <LeadContextProvider>
+          <PropertyContextProvider>
+            <body className={rubik.className}>
+            <Navbar></Navbar>{children}</body>
+          </PropertyContextProvider>
+        </LeadContextProvider>
+      </AuthContextProvider>
     </html>
   );
 }

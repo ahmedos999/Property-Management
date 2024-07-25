@@ -10,9 +10,15 @@ import UpdateModal from "./components/UpdateModel";
 import LeadModal from "./components/LeadModel";
 import { usePropertyContext } from "./hooks/usePropertyContext";
 import { useLeadContext } from "./hooks/useLeadContext";
+import { useAuthContext } from "./hooks/useAuthContext";
+import { useRouter } from 'next/navigation'
 
 
 export default function Home() {
+  
+  const {state:userState} = useAuthContext()
+  const router = useRouter()
+  
   const [showModal,setShowModal] = useState<boolean>(false)
   const [showLeadModal,setShowLeadModal] = useState<boolean>(false)
 
@@ -21,12 +27,14 @@ export default function Home() {
   const {state,dispatch} = usePropertyContext()
   const {state:leads,dispatch:dispatchLead} = useLeadContext()
 
+  
   useEffect(()=>{
+    if(!userState.user) router.push('/login')
     const fetchProperty = async()=>{
 
       const response = await fetch('http://localhost:4000/api/property/getPropertiesWithLeads',{
         headers:{
-            'Authorization':`Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjllY2MyMTBlMTRmYmYzODMwOTYzOTkiLCJpYXQiOjE3MjE3MzYzNDksImV4cCI6MTcyMTk5NTU0OX0.I4m_dWFn37vBAyQJ-CgAascf4_sRn23kiM_aMJlnFCI`
+            'Authorization':`Bearer ${userState.user?.token}`
         }
        })
 
@@ -41,7 +49,7 @@ export default function Home() {
     const fetchLeads = async()=>{
       const response = await fetch('http://localhost:4000/api/lead',{
         headers:{
-            'Authorization':`Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjllY2MyMTBlMTRmYmYzODMwOTYzOTkiLCJpYXQiOjE3MjE3MzYzNDksImV4cCI6MTcyMTk5NTU0OX0.I4m_dWFn37vBAyQJ-CgAascf4_sRn23kiM_aMJlnFCI`
+            'Authorization':`Bearer ${userState.user?.token}`
         }
        })
        if (!response.ok) {

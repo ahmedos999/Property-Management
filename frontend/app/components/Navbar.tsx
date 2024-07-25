@@ -1,8 +1,15 @@
+'use client'
 import React from 'react'
-import Link from 'next/link'
 import logo from './logo.png'
 import Image from 'next/image'
+import { useAuthContext } from '../hooks/useAuthContext'
+import { useSignout } from '../hooks/useSignout'
 export default function Navbar() {
+   const {logout} = useSignout()
+    const {state} = useAuthContext()
+    const signout=()=>{
+      logout()
+    } 
   return (
     <nav className='pb-4
       border-b-2 border-gray-200
@@ -24,8 +31,8 @@ export default function Navbar() {
         </h1>
       </div>
       <div className='flex gap-4 items-center'>
-        <h2>username</h2>
-        <button className='px-2 py-1 border bg-blue-500 text-white rounded hover:text-blue-500 hover:bg-white hover:border-blue-500'>Logout</button>
+        {state.user && <h2>{state.user.username}</h2>}
+        <button onClick={signout} className='px-2 py-1 border bg-blue-500 text-white rounded hover:text-blue-500 hover:bg-white hover:border-blue-500'>Logout</button>
       </div>
       </nav>
   )
