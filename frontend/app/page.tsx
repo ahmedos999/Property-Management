@@ -21,6 +21,6 @@ useEffect(() => {
 
 
 return(
-  <div></div>
+  <div className='text-center'> redirecting... refresh if this took to long</div>
 )
 }
