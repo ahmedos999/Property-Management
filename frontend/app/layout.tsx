@@ -20,14 +20,16 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <AuthContextProvider>
+      
         <LeadContextProvider>
           <PropertyContextProvider>
+          <AuthContextProvider>
             <body className={rubik.className}>
             <Navbar></Navbar>{children}</body>
+            </AuthContextProvider>
           </PropertyContextProvider>
         </LeadContextProvider>
-      </AuthContextProvider>
+      
     </html>
   );
 }

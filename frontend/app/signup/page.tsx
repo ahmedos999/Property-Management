@@ -40,10 +40,11 @@ const Signup = () => {
         <label htmlFor="">Re-enter Password</label>
         <input type="password" placeholder="xxxxxxx" name="" id="repass" className="mb-2 rounded border-2 border-slate-800 text-slate-900 p-1" value={repassword} onChange={(e)=>setrePassowrd(e.target.value)}/>
         {passError && <div className='mt-2 text-sm text-red-500 '>{passError}</div>}
-        <a href="/login" className="text-sm underline mt-2">Already have an account ?</a>
+        <p className="text-sm">Password should include Upper/lower/number/symbol</p>
+        <a href="/login" className="text-sm underline mt-2 font-bold">Already have an account ?</a>
         </div>
         <button onClick={submit} disabled={isLoading} className="bg-blue-800 w-full py-2 px-8 rounded mx-auto mt-4 text-white font-bold hover:bg-slate-200 hover:text-black transition-all flex justify-center items-center">Sign up</button>
-        {error && <div className='mt-2 text-sm text-red-500 '>{error}</div>}
+        {error && <div className='mt-2 text-sm text-red-500 font-bold'>{error}</div>}
     </div>
         
 );

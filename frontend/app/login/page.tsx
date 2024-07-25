@@ -33,7 +33,7 @@ const Login = () => {
         <input type="text" name="" placeholder="AhmedSheikh" id="email" className="mb-2 rounded border-2 border-slate-800 text-slate-900 p-1" value={username} onChange={(e)=>setUsername(e.target.value)} />
         <label htmlFor="">Password</label>
         <input type="password" placeholder="xxxxxxx" name="" id="pass" className="mb-2 rounded border-2 border-slate-800 text-slate-900 p-1" value={password} onChange={(e)=>setPassowrd(e.target.value)}/>
-        <a href="/signup" className="text-sm underline">Dont have an account signup?</a>
+        <a href="/signup" className="text-sm underline font-bold">Dont have an account signup?</a>
         </div>
         <button onClick={submit} disabled={isLoading} className="bg-blue-800 w-full py-2 px-8 rounded mx-auto mt-4 text-white font-bold hover:bg-slate-200 hover:text-black transition-all flex justify-center items-center">login</button>
         {error && <div className='mt-2 text-sm text-red-500 '>{error}</div>}

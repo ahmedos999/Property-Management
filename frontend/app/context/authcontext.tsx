@@ -35,6 +35,7 @@ interface PropertyContextProviderProps {
 
 const AuthContextProvider: FC<PropertyContextProviderProps> = ({ children }) => {
 
+
     useEffect(()=>{
         const user = localStorage.getItem('user')
         if(user){

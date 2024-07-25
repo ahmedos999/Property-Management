@@ -15,6 +15,7 @@ const Modal: React.FC<ChildComponentProps> = ({ closeModal }) => {
     const [selectedBuilding, setSelectedBuilding] = useState<string>('BuildingA');
     const {state:userState} = useAuthContext()
     const {state,dispatch} = usePropertyContext()
+    const [error,setError] = useState<string>()
 
     const handleCommunityChange = (event: ChangeEvent<HTMLInputElement>) => {
         setCommunity(event.target.value);
@@ -24,6 +25,10 @@ const Modal: React.FC<ChildComponentProps> = ({ closeModal }) => {
       };
 
       const createProperty = async() =>{
+        if(unitNo == ''){
+          setError('Plese enter unit No')
+          return
+        }
         const property = {unitNo,community:selectedCommunity,building:selectedBuilding}
 
         console.log(JSON.stringify(property))
@@ -37,7 +42,8 @@ const Modal: React.FC<ChildComponentProps> = ({ closeModal }) => {
           }
          }) 
          if (!response.ok) {
-          throw new Error('Somthing went wrong');
+          setError('something went wrong')
+          return
         }
       const json:Property = await response.json()
       dispatch({type:'CREATE_PROPERTY',payload:json})
@@ -91,6 +97,7 @@ const Modal: React.FC<ChildComponentProps> = ({ closeModal }) => {
         BuildingB
       </label>
     </div>
+    {error && <div className='text-red-500 my-2 text-sm'>{error}</div>}
         <button onClick={createProperty} className=" p-2 bg-blue-800 text-white rounded">
           Add New Property
         </button>

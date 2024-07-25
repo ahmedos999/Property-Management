@@ -14,10 +14,15 @@ const LeadModal: React.FC<ChildComponentProps> = ({ closeModal }) => {
   const [customerName, setcustomerName] = useState<string>('');
   const {state,dispatch} = useLeadContext()
   const {state:userState} = useAuthContext()
+  const [error,setError] = useState<string>()
   
 
 
       const createLead = async() =>{
+        if(customerName == '') {
+          setError('please enter customer name')
+          return
+        }
         const lead = {name:customerName}
 
         const response = await fetch('http://localhost:4000/api/lead',{
@@ -29,7 +34,8 @@ const LeadModal: React.FC<ChildComponentProps> = ({ closeModal }) => {
           }
          }) 
          if (!response.ok) {
-          throw new Error('Somthing went wrong');
+          setError('something went wrong')
+          return
         }
       const json:Lead = await response.json()
       dispatch({type:'CREATE_LEAD',payload:json})
@@ -41,7 +47,7 @@ const LeadModal: React.FC<ChildComponentProps> = ({ closeModal }) => {
         <div className='flex justify-between'><h2 className="text-xl font-bold mb-4">New Customer</h2> <button className='p-1 bg-red-400 text-white rounded' onClick={closeModal}>close</button></div>
         <label className="text-sm">Customer Name:</label>
         <input type="text" className="w-full bg-slate-200 rounded p-1 mb-2 placeholder:text-sm text-gray-900" placeholder="Enter Customer Name" value={customerName} onChange={(e:ChangeEvent<HTMLInputElement>)=>setcustomerName(e.target.value)}/>
-        
+        {error && <div className='text-red-500 my-2 text-sm'>{error}</div> }
         <button onClick={createLead} className=" p-2 bg-blue-800 text-white rounded">
           Add New Lead
         </button>

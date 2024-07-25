@@ -4,14 +4,23 @@ import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuthContext } from './hooks/useAuthContext';
 
+export default function Home() {
 
-
-export default function HomePage() {
-
-  const {state} = useAuthContext()
+const {state} = useAuthContext()
 const router = useRouter()
 
-useEffect(()=>{
-  if(state.user) {router.push('/home')}else{router.push('/login')}
-},[])
+useEffect(() => {
+  console.log(router)
+  console.log(state)
+  if (state.user) {
+    router.push('/home');
+  } else {
+    router.push('/login');
+  }
+});
+
+
+return(
+  <div></div>
+)
 }

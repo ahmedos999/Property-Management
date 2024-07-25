@@ -20,7 +20,6 @@ export const loginUser = async(req:any,res:any)=>{
 }
 
 export const signupUser = async(req:any,res:any)=>{
-    console.log('ran')
     const {username,password} = req.body
 
     try{
