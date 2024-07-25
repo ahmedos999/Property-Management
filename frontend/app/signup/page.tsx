@@ -1,14 +1,29 @@
 'use client'
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useSignup } from "../hooks/useSignup";
+import { useAuthContext } from "../hooks/useAuthContext";
+import { useRouter } from "next/navigation";
 
 const Signup = () => {
     const [username,setUsername] = useState<string>('')
     const [password,setPassowrd] =  useState<string>('')
+    const [repassword,setrePassowrd] =  useState<string>('')
+    const [passError,setpassError] =  useState<string>()
 
     const {signup,isLoading,error} = useSignup()
+    const {state:userState} = useAuthContext()
+    const router = useRouter()
+
+    
+        useEffect(()=>{
+            if(userState.user) router.replace('/home')
+        })
     const submit =async()=>{
+        if(password !== repassword ){
+            setpassError('Please re-enter password correctly')
+            return
+        }
         await signup(username,password)
     }
 
@@ -22,7 +37,10 @@ const Signup = () => {
         <input type="text" name="" placeholder="AhmedSheikh" id="email" className="mb-2 rounded border-2 border-slate-800 text-slate-900 p-1" value={username} onChange={(e)=>setUsername(e.target.value)} />
         <label htmlFor="">Password</label>
         <input type="password" placeholder="xxxxxxx" name="" id="pass" className="mb-2 rounded border-2 border-slate-800 text-slate-900 p-1" value={password} onChange={(e)=>setPassowrd(e.target.value)}/>
-        <a href="/login" className="text-sm underline">Already have an account ?</a>
+        <label htmlFor="">Re-enter Password</label>
+        <input type="password" placeholder="xxxxxxx" name="" id="repass" className="mb-2 rounded border-2 border-slate-800 text-slate-900 p-1" value={repassword} onChange={(e)=>setrePassowrd(e.target.value)}/>
+        {passError && <div className='mt-2 text-sm text-red-500 '>{passError}</div>}
+        <a href="/login" className="text-sm underline mt-2">Already have an account ?</a>
         </div>
         <button onClick={submit} disabled={isLoading} className="bg-blue-800 w-full py-2 px-8 rounded mx-auto mt-4 text-white font-bold hover:bg-slate-200 hover:text-black transition-all flex justify-center items-center">Sign up</button>
         {error && <div className='mt-2 text-sm text-red-500 '>{error}</div>}

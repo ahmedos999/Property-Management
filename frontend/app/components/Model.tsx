@@ -3,6 +3,7 @@
 import React, { ChangeEvent, useState } from 'react';
 import { Property } from '../types/property';
 import { usePropertyContext } from '../hooks/usePropertyContext';
+import { useAuthContext } from '../hooks/useAuthContext';
 
 interface ChildComponentProps {
   closeModal: () => void;
@@ -12,6 +13,7 @@ const Modal: React.FC<ChildComponentProps> = ({ closeModal }) => {
   const [unitNo, setunitNo] = useState<string>('');
     const [selectedCommunity, setCommunity] = useState<string>('CommunityA');
     const [selectedBuilding, setSelectedBuilding] = useState<string>('BuildingA');
+    const {state:userState} = useAuthContext()
     const {state,dispatch} = usePropertyContext()
 
     const handleCommunityChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -30,7 +32,7 @@ const Modal: React.FC<ChildComponentProps> = ({ closeModal }) => {
           method:'POST',
           body:JSON.stringify(property),
           headers:{
-              'Authorization':`Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjllY2MyMTBlMTRmYmYzODMwOTYzOTkiLCJpYXQiOjE3MjE3MzYzNDksImV4cCI6MTcyMTk5NTU0OX0.I4m_dWFn37vBAyQJ-CgAascf4_sRn23kiM_aMJlnFCI`,
+              'Authorization':`Bearer ${userState.user?.token}`,
               'Content-Type': 'application/json',
           }
          }) 

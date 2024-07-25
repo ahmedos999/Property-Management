@@ -4,6 +4,7 @@ import React, { ChangeEvent, useState } from 'react';
 import { Property } from '../types/property';
 import { Lead } from '../types/lead';
 import { usePropertyContext } from '../hooks/usePropertyContext';
+import { useAuthContext } from '../hooks/useAuthContext';
 
 interface ChildComponentProps {
   closeModal: () => void;
@@ -19,6 +20,7 @@ const UpdateModal: React.FC<ChildComponentProps> = ({ closeModal,property,leads 
     const [addedLeads, setaddedLeads] = useState<Lead[]>([]);
     const id = property._id
     const {state,dispatch} = usePropertyContext()
+    const {state:userState} = useAuthContext()
     
 
     const handleCommunityChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -33,7 +35,7 @@ const UpdateModal: React.FC<ChildComponentProps> = ({ closeModal,property,leads 
       }
 
       const updateProperty = async() =>{
-        const property = {unitNo,community:selectedCommunity,building:selectedBuilding}
+        const newproperty = {unitNo,community:selectedCommunity,building:selectedBuilding}
 
         console.log(JSON.stringify(property))
 
@@ -41,7 +43,7 @@ const UpdateModal: React.FC<ChildComponentProps> = ({ closeModal,property,leads 
           method:'PATCH',
           body:JSON.stringify(property),
           headers:{
-              'Authorization':`Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjllY2MyMTBlMTRmYmYzODMwOTYzOTkiLCJpYXQiOjE3MjE3MzYzNDksImV4cCI6MTcyMTk5NTU0OX0.I4m_dWFn37vBAyQJ-CgAascf4_sRn23kiM_aMJlnFCI`,
+              'Authorization':`Bearer ${userState.user?.token}`,
               'Content-Type': 'application/json',
           }
          }) 
@@ -49,10 +51,10 @@ const UpdateModal: React.FC<ChildComponentProps> = ({ closeModal,property,leads 
           throw new Error('Somthing went wrong');
         }
       const json:Property = await response.json()
-      json.unitNo = property.unitNo
-      json.building = property.building
-      json.community = property.community
-      console.log(json)
+      json.unitNo = newproperty.unitNo
+      json.building = newproperty.building
+      json.community = newproperty.community
+      json.leads = [...property.leads,...addedLeads]
       dispatch({type:'UPDATE_PROPERTY',payload:json})
       closeModal()
       }
@@ -75,7 +77,7 @@ const UpdateModal: React.FC<ChildComponentProps> = ({ closeModal,property,leads 
           method:'POST',
           body:JSON.stringify(ids),
           headers:{
-              'Authorization':`Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjllY2MyMTBlMTRmYmYzODMwOTYzOTkiLCJpYXQiOjE3MjE3MzYzNDksImV4cCI6MTcyMTk5NTU0OX0.I4m_dWFn37vBAyQJ-CgAascf4_sRn23kiM_aMJlnFCI`,
+              'Authorization':`Bearer ${userState.user?.token}`,
               'Content-Type': 'application/json',
           }
          }) 
@@ -83,6 +85,7 @@ const UpdateModal: React.FC<ChildComponentProps> = ({ closeModal,property,leads 
           throw new Error('Somthing went wrong');
         }
         const leadtoProperty:Property = {unitNo:property.unitNo,community:property.community,building:property.building,_id:property._id ,leads:[...property.leads,selectedLead]}
+        console.log(leadtoProperty)
         dispatch({type:'UPDATE_PROPERTY',payload:leadtoProperty})
         setaddedLeads([...addedLeads,selectedLead])
       }
@@ -135,9 +138,9 @@ const UpdateModal: React.FC<ChildComponentProps> = ({ closeModal,property,leads 
       </label>
     </div>
     <label htmlFor="" className='font-bold text-black'>Leads</label>
-    {property.leads.length == 0?<div>There is no Customers linked to this property </div>:<div className='flex gap-1 flex-wrap'>
-      {property.leads.map((lead)=>(<div className='p-1 rounded bg-slate-500 text-white'>{lead.name}</div>))}
-      {addedLeads && addedLeads.map((lead)=>(<div className='p-1 rounded bg-green-500 text-white'>{lead.name}</div>))}
+    {property.leads.length == 0 && addedLeads.length == 0?<div>There is no Customers linked to this property </div>:<div className='flex gap-1 flex-wrap'>
+      {property.leads.map((lead)=>(<div key={lead._id} className='p-1 rounded bg-slate-500 text-white'>{lead.name}</div>))}
+      {addedLeads && addedLeads.map((lead,index)=>(<div key={index} className='p-1 rounded bg-green-500 text-white'>{lead.name}</div>))}
     </div>}
     <div className='my-2'>
     <label className="text-sm block">Link Customers to property</label>

@@ -1,3 +1,4 @@
+import { useAuthContext } from "../hooks/useAuthContext"
 import { usePropertyContext } from "../hooks/usePropertyContext"
 import { Property } from "../types/property"
 
@@ -12,12 +13,13 @@ interface ChildComponentProps{
 
 export default function PropertyCard({ _id,unitNo, community, Building,leads,}: ChildComponentProps) {
   const {state,dispatch} = usePropertyContext()
+  const {state:userState} = useAuthContext()
     const deleteProperty = async(event:any)=>{
       event.stopPropagation()
         const response = await fetch(`http://localhost:4000/api/property/`+_id,{
             method:'DELETE',
             headers:{
-              'Authorization':`Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjllY2MyMTBlMTRmYmYzODMwOTYzOTkiLCJpYXQiOjE3MjE3MzYzNDksImV4cCI6MTcyMTk5NTU0OX0.I4m_dWFn37vBAyQJ-CgAascf4_sRn23kiM_aMJlnFCI`
+              'Authorization':`Bearer ${userState.user?.token}`
             }
           })
           if (!response.ok) {

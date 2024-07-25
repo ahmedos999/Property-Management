@@ -8,12 +8,11 @@ import { useRouter } from "next/navigation";
 const Login = () => {
     const {state:userState} = useAuthContext()
     const router = useRouter()
-    console.log(userState)
 
     
         useEffect(()=>{
-            if(userState.user) router.replace('/')
-    })
+            if(userState.user) router.replace('/home')
+        })
 
 
     const [username,setUsername] = useState<string>('')

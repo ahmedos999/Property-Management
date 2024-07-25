@@ -3,6 +3,7 @@
 import React, { ChangeEvent, useState } from 'react';
 import { Lead } from '../types/lead';
 import { useLeadContext } from '../hooks/useLeadContext';
+import { useAuthContext } from '../hooks/useAuthContext';
 
 
 interface ChildComponentProps {
@@ -12,19 +13,18 @@ interface ChildComponentProps {
 const LeadModal: React.FC<ChildComponentProps> = ({ closeModal }) => {
   const [customerName, setcustomerName] = useState<string>('');
   const {state,dispatch} = useLeadContext()
+  const {state:userState} = useAuthContext()
   
 
 
       const createLead = async() =>{
         const lead = {name:customerName}
 
-        console.log(JSON.stringify(lead))
-
         const response = await fetch('http://localhost:4000/api/lead',{
           method:'POST',
           body:JSON.stringify(lead),
           headers:{
-              'Authorization':`Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjllY2MyMTBlMTRmYmYzODMwOTYzOTkiLCJpYXQiOjE3MjE3MzYzNDksImV4cCI6MTcyMTk5NTU0OX0.I4m_dWFn37vBAyQJ-CgAascf4_sRn23kiM_aMJlnFCI`,
+              'Authorization':`Bearer ${userState.user?.token}`,
               'Content-Type': 'application/json',
           }
          }) 

@@ -1,6 +1,6 @@
 "use client"
 
-import React, { createContext, useReducer, ReactNode, Dispatch, FC } from "react";
+import React, { createContext, useReducer, ReactNode, Dispatch, FC, useEffect } from "react";
 import { user } from "../types/user";
 
 // Define the state and action types
@@ -34,6 +34,13 @@ interface PropertyContextProviderProps {
 }
 
 const AuthContextProvider: FC<PropertyContextProviderProps> = ({ children }) => {
+
+    useEffect(()=>{
+        const user = localStorage.getItem('user')
+        if(user){
+            dispatch({type:'LOGIN',payload:JSON.parse(user)})
+        }
+    },[])
   const [state, dispatch] = useReducer(userReducer, {
     user: null,
   });
